@@ -9,5 +9,5 @@ import { RouterOutlet, RouterLink } from '@angular/router';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'Spring Boot - Angular Application';
+  title = 'Catalog';
 }
