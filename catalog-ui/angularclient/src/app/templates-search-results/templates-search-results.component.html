@@ -1,0 +1,27 @@
+<table class="table table-striped">
+  <tbody>
+    <tr *ngFor="let template of results">
+      <td>
+        <a [routerLink]="['/templates', template.id]">{{template.name}}</a></td>
+      <td class="text-center" style="width: 5%">
+        <a class="icon-link link-danger" (click)="delete(template.id)" title="Delete"> <i class="bi bi-x"></i> </a></td>
+    </tr>
+  </tbody>
+</table>
+<nav>
+  <ul class="pagination justify-content-center">
+    <li class="page-item">
+      <a class="page-link" href="#">
+        <span>&laquo;</span>
+      </a>
+    </li>
+    <li class="page-item"><a class="page-link" href="#">1</a></li>
+    <li class="page-item"><a class="page-link" href="#">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item">
+      <a class="page-link" href="#">
+        <span>&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>

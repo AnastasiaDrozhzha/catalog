@@ -1,4 +1,4 @@
-export class Greeting {
-  name!: string;
+export interface Greeting {
+  name: string;
 
 }

@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="row">
+      <div class="card border border-0">
+        <div class="card-body">
+          <section>
+            <form class="d-flex">
+              <input class="form-control me-2" type="search" placeholder="Filter by template name" (keyup)="onSearch($event)"  >
+              <button [routerLink]="['/addTemplate']" class="btn btn-outline-dark" type="button" title="Add"><i class="bi bi-plus"></i></button>
+            </form>
+          </section>
+        </div>
+      </div>
+    <div class="card border border-0">
+      <div class="card-body">
+        <section>
+          <app-templates-search-results [results]="results" (deleteEvent)="onDelete($event)"></app-templates-search-results>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
