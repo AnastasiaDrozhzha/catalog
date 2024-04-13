@@ -51,6 +51,10 @@ export class TemplatesSearchComponent implements OnInit, OnDestroy {
     this.performSearch(this.lastSearch, this.getOffset(), this.itemsPerPage);
   }
 
+  onChange(event: Event) {
+    console.log("Change")
+  }
+
   performSearch(searchValue: string, offset: number, pageSize: number) {
     const searchStrChanged = this.lastSearch !== searchValue;
     if (searchStrChanged) {
