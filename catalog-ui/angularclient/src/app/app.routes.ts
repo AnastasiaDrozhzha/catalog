@@ -7,5 +7,5 @@ export const routes: Routes = [
   { path: 'greeting', component: GreetingComponent },
   { path: 'templates', component: TemplatesSearchComponent, title: 'Templates' },
   { path: 'templates/:templateId', component: TemplateDetailsComponent, title: 'Template details' },
-  { path: 'addTemplate', component: TemplateDetailsComponent, title: 'Add template' },
+  { path: 'templates/new', component: TemplateDetailsComponent, title: 'Add template' },
   ];

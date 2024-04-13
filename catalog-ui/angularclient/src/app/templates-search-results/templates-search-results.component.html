@@ -1,10 +1,10 @@
 <table class="table table-striped">
   <tbody>
     <tr *ngFor="let template of results">
-      <td>
+      <td class="align-middle">
         <a [routerLink]="['/templates', template.id]">{{template.name}}</a></td>
       <td class="text-center" style="width: 5%">
-        <a class="icon-link link-danger" (click)="delete(template.id)" title="Delete"> <i class="bi bi-x"></i> </a></td>
+        <button class="btn btn-outline-danger border-0 m-0" (click)="delete(template.id)" title="Delete"> <i class="bi bi-x"></i> </button></td>
     </tr>
   </tbody>
 </table>

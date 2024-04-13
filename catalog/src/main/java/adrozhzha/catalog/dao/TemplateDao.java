@@ -1,6 +1,7 @@
 package adrozhzha.catalog.dao;
 
 import adrozhzha.catalog.db.tables.records.TemplateRecord;
+import adrozhzha.catalog.model.NotFoundException;
 import adrozhzha.catalog.model.Template;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
@@ -14,6 +15,7 @@ import static org.jooq.impl.DSL.selectFrom;
 
 @Repository
 public class TemplateDao {
+    public static final String ENTITY_NAME = Template.class.getSimpleName();
     private final DSLContext create;
 
     public TemplateDao(DSLContext dslContext) {
@@ -33,7 +35,7 @@ public class TemplateDao {
 
     private Template toTemplate(TemplateRecord templateRecord) {
         Template template = new Template();
-        template.setId(templateRecord.getId());//TODO: use mapper library here
+        template.setId(templateRecord.getId());
         template.setName(templateRecord.getName());
         return template;
     }
@@ -65,7 +67,9 @@ public class TemplateDao {
                 .set(TEMPLATE.NAME, template.getName())
                 .where(TEMPLATE.ID.eq(template.getId()))
                 .execute();
-        if (rowNum != 1) {
+        if (rowNum == 0) {
+            throw new NotFoundException(ENTITY_NAME, template.getId());
+        } else if (rowNum != 1) {
             throw new RuntimeException("Number of records updated is not equal to 1");
         }
         return template;
@@ -80,7 +84,7 @@ public class TemplateDao {
                 .where(TEMPLATE.ID.eq(templateId))
                 .fetchOne();
         if (result == null) {
-            throw new RuntimeException("Not found"); // TODO: work with exceptions
+            throw new NotFoundException(ENTITY_NAME, templateId);
         }
         return toTemplate(result);
     }

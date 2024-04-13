@@ -1,3 +1,4 @@
+<app-alert [message]="alertMessage" (alertDismissEvent)="clearAlert()"></app-alert>
 <div class="container">
   <div class="row">
       <div class="card border border-0">
@@ -5,7 +6,7 @@
           <section>
             <form class="d-flex">
               <input class="form-control me-2" type="search" placeholder="Filter by template name" (keyup)="onSearch($event)" (search)="onSearch($event)" >
-              <button [routerLink]="['/addTemplate']" class="btn btn-outline-dark" type="button" title="Add"><i class="bi bi-plus"></i></button>
+              <button [routerLink]="['/templates/new']" class="btn btn-outline-dark" type="button" title="Add"><i class="bi bi-plus"></i></button>
             </form>
           </section>
         </div>

@@ -16,7 +16,7 @@ import { PaginationComponent } from '../pagination/pagination.component';
 export class TemplatesSearchResultsComponent implements PageConfig {
 
   templatesService: TemplatesService = inject(TemplatesService);
-  @Output() deleteEvent = new EventEmitter<number>();
+  @Output() deleteEvent = new EventEmitter<string>();
   @Output() pageChangeEvent = new EventEmitter<number>();
   @Input() results!: Template[];
   @Input() currentPage!: number;
@@ -25,7 +25,8 @@ export class TemplatesSearchResultsComponent implements PageConfig {
 
   delete(templateId: number | undefined) {
     if (templateId !== undefined) {
-       this.templatesService.delete(templateId).subscribe(() => {this.deleteEvent.emit(templateId);});
+       this.templatesService.delete(templateId).subscribe({next: () => {this.deleteEvent.emit('');},
+       error: (err) => {this.deleteEvent.emit("Error deleting template")}});
     }
   }
 

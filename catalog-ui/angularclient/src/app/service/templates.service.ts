@@ -22,7 +22,7 @@ export class TemplatesService {
     const searchHttpOptions = {
       headers: this.httpOptions.headers,
       params: new HttpParams().set('search', search).set('offset', offset).set('pageSize', pageSize)
-      }
+    }
     return this.http.get<Page<Template>>(this.templatesUrl, searchHttpOptions);
   }
 
@@ -49,14 +49,4 @@ export class TemplatesService {
     return this.http.delete<void>(url, this.httpOptions);
   }
 
- private handleError<T>(operation = 'operation', result?: T) {
-  return (error: any): Observable<T> => {
-
-    // TODO: send the error to remote logging infrastructure
-    console.error(error); // log to console instead
-
-    // Let the app keep running by returning an empty result.
-    return of(result as T);
-  };
-}
 }
