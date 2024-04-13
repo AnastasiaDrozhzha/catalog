@@ -18,16 +18,19 @@ export class TemplatesSearchComponent implements OnInit, OnDestroy {
   templatesService: TemplatesService = inject(TemplatesService);
   private searchSubject = new Subject<string>();
   lastSearch = '';
+  currentPage: number = 1;
+  itemsPerPage: number = 5;
+  totalItems: number = 0;
 
   private readonly debounceTimeMs = 300;
 
   constructor() {
-    this.results = this.templatesService.findAll();
+    this.performSearch('', this.getOffset(), this.itemsPerPage);
   }
 
   ngOnInit() {
     this.searchSubject.pipe(debounceTime(this.debounceTimeMs)).subscribe((searchValue) => {
-      this.performSearch(searchValue);
+      this.performSearch(searchValue, 0, this.itemsPerPage);
     });
   }
 
@@ -40,11 +43,27 @@ export class TemplatesSearchComponent implements OnInit, OnDestroy {
   }
 
   onDelete(event: number) {
-    this.performSearch(this.lastSearch);
+    this.performSearch(this.lastSearch, this.getOffset(), this.itemsPerPage);
   }
 
-  performSearch(searchValue: string) {
+  onPageChange(event: number) {
+    this.currentPage = event;
+    this.performSearch(this.lastSearch, this.getOffset(), this.itemsPerPage);
+  }
+
+  performSearch(searchValue: string, offset: number, pageSize: number) {
+    const searchStrChanged = this.lastSearch !== searchValue;
+    if (searchStrChanged) {
+      this.currentPage = 1;
+    }
+    this.templatesService.searchPage(searchValue, this.getOffset(), this.itemsPerPage)
+      .subscribe(
+        page => { this.results = page.results;
+                  this.totalItems = page.totalCount;});
     this.lastSearch = searchValue;
-    console.log('Performing search for:', searchValue);
+  }
+
+  getOffset(): number {
+    return (this.currentPage - 1) * this.itemsPerPage;
   }
 }

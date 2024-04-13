@@ -1,35 +1,62 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { of, Observable } from 'rxjs';
 import { Template } from '../model/template';
+import { Page } from '../model/page';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TemplatesService {
 
-  templates: Template[] = [{id: 1, name: "Template 1"}, {id: 2, name: "Template 2"}, {id: 3, name: "Template 3"}]
+  private templatesUrl: string;
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
 
-  constructor() { }
-
-  findAll(): Template[] {
-    return this.templates;
+  constructor(private http: HttpClient) {
+    this.templatesUrl = 'http://localhost:8080/templates';
   }
 
-  findById(id: number): Template | undefined {
-    return this.templates.find(template => template.id === id);
+  searchPage(search: string, offset: number, pageSize: number): Observable<Page<Template>> {
+    const searchHttpOptions = {
+      headers: this.httpOptions.headers,
+      params: new HttpParams().set('search', search).set('offset', offset).set('pageSize', pageSize)
+      }
+    return this.http.get<Page<Template>>(this.templatesUrl, searchHttpOptions);
   }
 
-  create(template: Template): Template {
+  findById(templateId: number): Observable<Template> {
+    const url = `${this.templatesUrl}/${templateId}`;
+    return this.http.get<Template>(url);
+  }
+
+  create(template: Template): Observable<Template> {
     console.log("Added template: " + JSON.stringify(template));
-    template.id = 55;
-    return template;
+    return this.http.post<Template>(this.templatesUrl, template, this.httpOptions);;
   }
 
-  update(template: Template): Template {
+  update(template: Template): Observable<Template> {
     console.log("Updated template: " + JSON.stringify(template));
-    return template;
+    const url = `${this.templatesUrl}/${template.id}`;
+    return this.http.put<Template>(url, template, this.httpOptions);
   }
 
-  delete(templateId: number) {
+  delete(templateId: number): Observable<void>{
     console.log("Delete template with id: " + templateId);
+    const url = `${this.templatesUrl}/${templateId}`;
+
+    return this.http.delete<void>(url, this.httpOptions);
   }
+
+ private handleError<T>(operation = 'operation', result?: T) {
+  return (error: any): Observable<T> => {
+
+    // TODO: send the error to remote logging infrastructure
+    console.error(error); // log to console instead
+
+    // Let the app keep running by returning an empty result.
+    return of(result as T);
+  };
+}
 }
