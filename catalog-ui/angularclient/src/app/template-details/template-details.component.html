@@ -8,21 +8,45 @@
       <button class="btn btn-close m-1" type="button" title="Back" (click)="onBack()"></button>
     </div>
   </div>
-  <div class="row text-end">
+  <div class="row text-center">
     <div class="col">
         <button class="btn btn-outline-dark m-1" type="button" title="Edit" *ngIf="isReadonly()" (click)="onEdit()"><i class="bi bi-pencil"></i></button>
         <button class="btn btn-outline-dark m-1" type="button" title="Save" *ngIf="!isReadonly()" (click)="onSave()"><i class="bi bi-save"></i></button>
         <button class="btn btn-outline-dark m-1" type="button" title="Cancel" *ngIf="!isReadonly()&&!isAdd()" (click)="onCancel()"><i class="bi bi-x"></i></button>
         <button class="btn btn-outline-danger m-1" type="button" title="Delete" *ngIf="isReadonly()" (click)="onDelete()"><i class="bi bi-x"></i></button>
     </div>
-    <div class="col-md-auto"></div>
   </div>
   <div class="row justify-content-center">
-    <div class="col-auto">
-      <label for="templateName" class="col-form-label">Name: </label>
-    </div>
-    <div class="col-auto">
-      <input type="text" class="form-control" [readonly]="isReadonly()" [formControl]="nameFC" id="templateName">
+    <div class="col">
+      <div class="card border-0 p-2">
+        <div class="card-header text-center">
+          <div class="row justify-content-center m-2">
+            <div class="col-auto">
+              <label for="templateName" class="col-form-label">Name: </label>
+            </div>
+            <div class="col-auto">
+              <input type="text" class="form-control" [readonly]="isReadonly()" [formControl]="nameFC" id="templateName">
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0 pt-1">
+          <table *ngIf="template" class="table table-striped mb-0">
+            <tbody>
+            <tr *ngFor="let property of template.properties">
+              <td class="align-middle">
+                <a>{{property.name}}</a></td>
+              <td class="text-center" style="width: 5%">
+                <button class="btn btn-outline-danger border-0 m-0" (click)="removeProperty(property.id)" title="Remove property"> <i class="bi bi-x"></i> </button></td>
+            </tr>
+            </tbody>
+          </table>
+          <div class="row justify-content-center">
+            <div class="col-auto">
+              <button class="btn btn-outline-dark m-1" type="button" title="Add property"><i class="bi bi-plus"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

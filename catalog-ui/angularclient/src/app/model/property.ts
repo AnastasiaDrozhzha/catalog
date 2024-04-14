@@ -1,7 +1,7 @@
 import { PropertyType } from './property-type';
 
 export interface Property {
-  id: number;
+  id?: number;
   name: string;
   type: PropertyType;
 }

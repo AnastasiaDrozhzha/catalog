@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TemplatesService } from '../service/templates.service';
 import { Template } from '../model/template';
+import { Property } from '../model/property';
+import { PropertyType } from '../model/property-type';
 import { Alertable } from '../model/alertable';
 import { handleError } from '../model/errorUtil';
 import { AlertComponent } from '../alert/alert.component';
@@ -25,6 +27,9 @@ export class TemplateDetailsComponent implements Alertable {
   readonly = true;
   nameFC = new FormControl('')
   alertMessage: string = '';
+  fakeProperties: Property[] = [{id: 1, name: 'Prop1', type: PropertyType.string},
+  {id: 2, name: 'Prop2', type: PropertyType.number},
+  {id: 3, name: 'Prop3', type: PropertyType.boolean}];
 
 
   constructor() {
@@ -36,6 +41,10 @@ export class TemplateDetailsComponent implements Alertable {
         .subscribe(
           {next: (template) => {
             this.template = template;
+                // TODO: remove fakeProperties
+                if (this.template) {
+                  this.template.properties = this.fakeProperties;
+                }
             this.reload();
           },
           error: (err) => {handleError(this, err);}
@@ -105,5 +114,9 @@ export class TemplateDetailsComponent implements Alertable {
 
   clearAlert() {
     this.alertMessage = '';
+  }
+
+  removeProperty(propertyId: number|undefined): void {
+    console.log("property remove with id " + propertyId);
   }
 }
