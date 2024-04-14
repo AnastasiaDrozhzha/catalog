@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Template } from '../model/template';
 
 @Component({
   selector: 'app-properties-search',
@@ -8,5 +9,11 @@ import { Component } from '@angular/core';
   styleUrl: './properties-search.component.css'
 })
 export class PropertiesSearchComponent {
+
+  template: Template | undefined;
+
+   constructor() {
+     this.template = window.history.state;
+   }
 
 }

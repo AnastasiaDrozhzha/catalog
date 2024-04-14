@@ -2,7 +2,6 @@
 <div class="container">
   <div class="row text-end">
     <div class="col">
-
     </div>
     <div class="col-md-auto">
       <button class="btn btn-close m-1" type="button" title="Back" (click)="onBack()"></button>
@@ -20,40 +19,40 @@
     <div class="col">
       <div class="card border-0 p-2">
         <div class="card-header text-center">
-          <div class="row justify-content-center m-2">
+          <div class="row m-2">
             <div class="col-auto">
               <label for="templateName" class="col-form-label">Name: </label>
             </div>
-            <div class="col-auto">
+            <div class="col">
               <input type="text" class="form-control" [readonly]="isReadonly()" [formControl]="nameFC" id="templateName">
+            </div>
+            <div class="col-2 text-end">
+              <button class="btn btn-outline-dark m-1" [routerLink]="['/templates', template?.id, 'properties']"
+                      [state]="template"
+                      type="button" title="Add property" [disabled]="isReadonly()"><i class="bi bi-plus"></i></button>
             </div>
           </div>
         </div>
         <div class="card-body p-0 pt-1">
           <table *ngIf="template" class="table table-striped mb-0">
             <tbody>
-            <tr *ngFor="let property of template.properties; let first = first; let last = last; index as i">
-              <td class="align-middle w-75">
-                <a>{{property.name}}</a>
-              </td>
-              <td class="text-center text-nowrap w-25">
-                {{propertyTypeToString(property.type)}}
-              </td>
-              <td class="text-center text-nowrap" >
-                <button *ngIf="!first" class="btn border-0 m-0 p-0" title="Up" [disabled]="isReadonly()" (click)="movePropertyUp(i)"> <i class="bi bi-arrow-up-short"></i> </button>
-                <button *ngIf="!last" class="btn border-0 m-0 p-0" title="Down" [disabled]="isReadonly()" (click)="movePropertyDown(i)"> <i class="bi bi-arrow-down-short"></i> </button>
-              </td>
-              <td class="text-center" >
-                <button class="btn btn-outline-danger border-0 m-0 p-0" [disabled]="isReadonly()" (click)="removeProperty(property.id)" title="Remove property"> <i class="bi bi-x"></i> </button>
-              </td>
-            </tr>
+              <tr *ngFor="let property of template.properties; let first = first; let last = last; index as i">
+                <td class="align-middle w-75 text-break">
+                  <a>{{property.name}}</a>
+                </td>
+                <td class="text-center text-nowrap w-25">
+                  {{propertyTypeToString(property.type)}}
+                </td>
+                <td class="text-center text-nowrap" >
+                  <button *ngIf="!first" class="btn border-0 m-0 p-0" title="Up" [disabled]="isReadonly()" (click)="movePropertyUp(i)"> <i class="bi bi-arrow-up-short"></i> </button>
+                  <button *ngIf="!last" class="btn border-0 m-0 p-0" title="Down" [disabled]="isReadonly()" (click)="movePropertyDown(i)"> <i class="bi bi-arrow-down-short"></i> </button>
+                </td>
+                <td class="text-center" >
+                  <button class="btn btn-outline-danger border-0 m-0 p-0" [disabled]="isReadonly()" (click)="removeProperty(property.id)" title="Remove property"> <i class="bi bi-x"></i> </button>
+                </td>
+              </tr>
             </tbody>
           </table>
-          <div class="row justify-content-center">
-            <div class="col-auto">
-              <button class="btn btn-outline-dark m-1" type="button" title="Add property" [disabled]="isReadonly()"><i class="bi bi-plus"></i></button>
-            </div>
-          </div>
         </div>
       </div>
     </div>

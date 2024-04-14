@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TemplatesService } from '../service/templates.service';
 import { Template } from '../model/template';
@@ -13,7 +13,7 @@ import { AlertComponent } from '../alert/alert.component';
 @Component({
   selector: 'app-template-details',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AlertComponent],
+  imports: [CommonModule, ReactiveFormsModule, AlertComponent, RouterLink],
   templateUrl: './template-details.component.html',
   styleUrl: './template-details.component.css'
 })
@@ -29,7 +29,22 @@ export class TemplateDetailsComponent implements Alertable {
   alertMessage: string = '';
   fakeProperties: Property[] = [{id: 1, name: 'Prop1', type: PropertyType.string},
   {id: 2, name: 'Prop2', type: PropertyType.number},
-  {id: 3, name: 'Prop3', type: PropertyType.boolean}];
+  {id: 3, name: 'Prop3', type: PropertyType.boolean},
+  {id: 1, name: 'Prop1', type: PropertyType.string},
+    {id: 2, name: 'Prop2', type: PropertyType.number},
+    {id: 3, name: 'Prop3', type: PropertyType.boolean},
+    {id: 1, name: 'Prop1', type: PropertyType.string},
+      {id: 2, name: 'Propaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafffffffffffffffffffffffffffffffffffffffffffffffffffffffffff2', type: PropertyType.number},
+      {id: 3, name: 'Prop3', type: PropertyType.boolean},
+      {id: 1, name: 'Prop1', type: PropertyType.string},
+        {id: 2, name: 'Prop2', type: PropertyType.number},
+        {id: 3, name: 'Prop3', type: PropertyType.boolean},
+        {id: 1, name: 'Prop1', type: PropertyType.string},
+                {id: 2, name: 'Prop2', type: PropertyType.number},
+                {id: 3, name: 'Prop3', type: PropertyType.boolean},
+                {id: 1, name: 'Prop1', type: PropertyType.string},
+                        {id: 2, name: 'Prop2', type: PropertyType.number},
+                        {id: 3, name: 'Prop3', type: PropertyType.boolean}];
 
 
   constructor() {
