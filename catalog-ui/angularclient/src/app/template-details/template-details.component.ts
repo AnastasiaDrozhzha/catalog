@@ -119,4 +119,26 @@ export class TemplateDetailsComponent implements Alertable {
   removeProperty(propertyId: number|undefined): void {
     console.log("property remove with id " + propertyId);
   }
+
+  propertyTypeToString(type: PropertyType): string {
+    return PropertyType[type];
+  }
+
+  movePropertyUp(index: number): void {
+    this.moveProperty(index, index-1);
+  }
+
+  movePropertyDown(index: number): void {
+    this.moveProperty(index, index+1);
+  }
+
+  private moveProperty(from: number, to: number): void {
+    if (this.template?.properties) {
+      // remove `from` item and store it
+      var property = this.template.properties.splice(from, 1)[0];
+      // insert stored item into position `to`
+      this.template.properties.splice(to, 0, property);
+    }
+  }
+
 }
