@@ -1,1 +1,27 @@
-<p>{{template?.name}}</p>
+<app-alert [message]="alertMessage" (alertDismissEvent)="clearAlert()"></app-alert>
+<div class="container">
+  <div class="row">
+    <div class="card border border-0">
+      <div class="card-body">
+        <section>
+          <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Filter by property name" (keyup)="onSearch($event)" (search)="onSearch($event)" >
+            <button [routerLink]="['/properties/new']" class="btn btn-outline-dark" type="button" title="Add Property"><i class="bi bi-plus"></i></button>
+          </form>
+        </section>
+      </div>
+    </div>
+    <div class="card border border-0">
+      <div class="card-body">
+        <section>
+            <app-properties-search-results [results]="results"
+                                           [currentPage]="currentPage"
+                                           [itemsPerPage]="itemsPerPage"
+                                           [totalItems]="totalItems"
+                                           (deleteEvent)="onDelete($event)"
+                                           (pageChangeEvent)="onPageChange($event)"></app-properties-search-results>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

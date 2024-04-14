@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TemplatesService } from '../service/templates.service';
 import { Template } from '../model/template';
+import { TemplateState } from '../model/template-state';
 import { Property } from '../model/property';
 import { PropertyType } from '../model/property-type';
 import { Alertable } from '../model/alertable';
@@ -24,27 +25,19 @@ export class TemplateDetailsComponent implements Alertable {
   location: Location = inject(Location);
   templatesService = inject(TemplatesService);
   template: Template | undefined;
+  originalTemplate: Template | undefined;
   readonly = true;
   nameFC = new FormControl('')
   alertMessage: string = '';
-  fakeProperties: Property[] = [{id: 1, name: 'Prop1', type: PropertyType.string},
-  {id: 2, name: 'Prop2', type: PropertyType.number},
-  {id: 3, name: 'Prop3', type: PropertyType.boolean},
-  {id: 1, name: 'Prop1', type: PropertyType.string},
-    {id: 2, name: 'Prop2', type: PropertyType.number},
-    {id: 3, name: 'Prop3', type: PropertyType.boolean},
-    {id: 1, name: 'Prop1', type: PropertyType.string},
-      {id: 2, name: 'Propaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafffffffffffffffffffffffffffffffffffffffffffffffffffffffffff2', type: PropertyType.number},
-      {id: 3, name: 'Prop3', type: PropertyType.boolean},
-      {id: 1, name: 'Prop1', type: PropertyType.string},
-        {id: 2, name: 'Prop2', type: PropertyType.number},
-        {id: 3, name: 'Prop3', type: PropertyType.boolean},
-        {id: 1, name: 'Prop1', type: PropertyType.string},
-                {id: 2, name: 'Prop2', type: PropertyType.number},
-                {id: 3, name: 'Prop3', type: PropertyType.boolean},
-                {id: 1, name: 'Prop1', type: PropertyType.string},
-                        {id: 2, name: 'Prop2', type: PropertyType.number},
-                        {id: 3, name: 'Prop3', type: PropertyType.boolean}];
+  modified = false;
+
+
+  fakeProperties: Property[] = [{id: 1, name: 'Prop1', type: PropertyType[PropertyType.string]},
+                                   {id: 2, name: 'Prop2', type: PropertyType[PropertyType.number]},
+                                   {id: 3, name: 'Prop3', type: PropertyType[PropertyType.boolean]},
+                                   {id: 4, name: 'Prop4', type: PropertyType[PropertyType.string]},
+                                     {id: 5, name: 'Prop5', type: PropertyType[PropertyType.number]},
+                                     {id: 6, name: 'Prop6', type: PropertyType[PropertyType.boolean]}];
 
 
   constructor() {
@@ -52,19 +45,29 @@ export class TemplateDetailsComponent implements Alertable {
       if (templateId === 'new') {
         this.onEdit();
       } else {
-        this.templatesService.findById(Number(templateId))
-        .subscribe(
-          {next: (template) => {
-            this.template = template;
-                // TODO: remove fakeProperties
-                if (this.template) {
-                  this.template.properties = this.fakeProperties;
-                }
-            this.reload();
-          },
-          error: (err) => {handleError(this, err);}
+        const state = window.history.state;
+        if (state !== null && state.template !== undefined) {
+          this.template = state.template;
+          this.setFormValues(this.template);
+          this.originalTemplate = state.originalTemplate;
+          this.modified = state.modified;
+          this.readonly = state.readonly;
+        } else {
+          this.templatesService.findById(Number(templateId))
+          .subscribe(
+            {next: (template) => {
+              this.template = template;
+              this.rememberOriginalTemplate(template);
+                  // TODO: remove fakeProperties
+                  if (this.template) {
+                    this.template.properties = this.fakeProperties;
+                  }
+              this.reload(template);
+            },
+            error: (err) => {handleError(this, err);}
+          }
+          );
         }
-        );
       }
   }
 
@@ -78,27 +81,26 @@ export class TemplateDetailsComponent implements Alertable {
 
   onCancel() {
     this.readonly = true;
-    this.reload();
+    this.reload(this.originalTemplate);
   }
 
   onSave() {
-    if (this.template == undefined) {
-      this.template = { name: this.nameFC.value ?? '' };
-    }
+    this.template = this.saveLocally();
 
     if (this.isAdd()) {
       this.templatesService.create(this.template).subscribe({next: (template) => {
         this.template = template;
+        this.rememberOriginalTemplate(template);
         this.readonly = true;
-        this.reload();
+        this.reload(template);
         },
       error: (err) => {handleError(this, err);} });
     } else {
-      this.template.name = this.nameFC.value ?? '';
       this.templatesService.update(this.template).subscribe({next: (template) => {
         this.template = template;
+        this.rememberOriginalTemplate(template);
         this.readonly = true;
-        this.reload();
+        this.reload(template);
         },
         error: (err) => {handleError(this, err);} });
     }
@@ -112,15 +114,55 @@ export class TemplateDetailsComponent implements Alertable {
   }
 
   onBack() {
-    this.location.back();
+    this.router.navigate(['/templates']);
   }
 
   isAdd(): boolean {
     return this.template?.id === undefined;
   }
 
-  reload() {
-    this.nameFC.setValue(this.template?.name ?? '');
+  setFormValues(template: Template|undefined): void {
+    this.nameFC.setValue(template?.name ?? '');
+  }
+
+  reload(template: Template | undefined): void {
+    this.setFormValues(template);
+    this.modified = false;
+  }
+
+  onChange() {
+    this.modified = true;
+  }
+
+  onReload() {
+    const templateId = this.template?.id;
+    this.templatesService.findById(Number(templateId))
+    .subscribe(
+      {next: (template) => {
+        this.template = template;
+        this.rememberOriginalTemplate(template);
+            // TODO: remove fakeProperties
+            if (this.template) {
+              this.template.properties = this.fakeProperties;
+            }
+        this.reload(template);
+      },
+      error: (err) => {handleError(this, err);}
+    });
+  }
+
+  saveLocally(): Template {
+    if (this.template === undefined) {
+      this.template = { name: '' };
+    }
+    this.template.name = this.nameFC.value ?? '';
+    return this.template;
+  }
+
+  private rememberOriginalTemplate(template: Template) {
+     this.originalTemplate = {id: template.id, name: template.name};
+     // TODO: deep copy of properties
+     this.originalTemplate.properties = this.fakeProperties;
   }
 
   showAlert(message: string): void {
@@ -131,12 +173,21 @@ export class TemplateDetailsComponent implements Alertable {
     this.alertMessage = '';
   }
 
-  removeProperty(propertyId: number|undefined): void {
-    console.log("property remove with id " + propertyId);
+  addOrRemoveProperties(): void {
+    this.saveLocally();
+    this.router.navigate(['/templates', this.template?.id, 'properties'], {state: this.collectTemplateState()});
   }
 
-  propertyTypeToString(type: PropertyType): string {
-    return PropertyType[type];
+  collectTemplateState() {
+    return {template: this.template,
+      originalTemplate: this.originalTemplate,
+      modified: this.modified,
+      readonly: this.readonly
+      };
+  }
+
+  removeProperty(propertyId: number|undefined): void {
+    console.log("property remove with id " + propertyId);
   }
 
   movePropertyUp(index: number): void {

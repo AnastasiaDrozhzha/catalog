@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { of, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Template } from '../model/template';
 import { Page } from '../model/page';
 
@@ -32,18 +32,15 @@ export class TemplatesService {
   }
 
   create(template: Template): Observable<Template> {
-    console.log("Added template: " + JSON.stringify(template));
     return this.http.post<Template>(this.templatesUrl, template, this.httpOptions);;
   }
 
   update(template: Template): Observable<Template> {
-    console.log("Updated template: " + JSON.stringify(template));
     const url = `${this.templatesUrl}/${template.id}`;
     return this.http.put<Template>(url, template, this.httpOptions);
   }
 
   delete(templateId: number): Observable<void>{
-    console.log("Delete template with id: " + templateId);
     const url = `${this.templatesUrl}/${templateId}`;
 
     return this.http.delete<void>(url, this.httpOptions);

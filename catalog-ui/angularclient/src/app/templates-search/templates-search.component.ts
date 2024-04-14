@@ -23,7 +23,7 @@ export class TemplatesSearchComponent implements OnInit, OnDestroy, Alertable {
   private searchSubject = new Subject<string>();
   lastSearch = '';
   currentPage: number = 1;
-  itemsPerPage: number = 5;
+  itemsPerPage: number = 10;
   totalItems: number = 0;
   alertMessage: string = '';
 

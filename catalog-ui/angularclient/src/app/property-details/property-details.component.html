@@ -1,0 +1,39 @@
+<app-alert [message]="alertMessage" (alertDismissEvent)="clearAlert()"></app-alert>
+<div class="container">
+  <div class="row text-end">
+    <div class="col">
+    </div>
+    <div class="col-md-auto">
+      <button class="btn btn-close m-1" type="button" title="Back" (click)="onBack()"></button>
+    </div>
+  </div>
+  <div class="row text-center">
+    <div class="col">
+      <button class="btn btn-outline-dark m-1" type="button" title="Reload" *ngIf="!isAdd()" (click)="onReload()"><i class="bi bi-arrow-clockwise"></i></button>
+      <button class="btn btn-outline-dark m-1" type="button" title="Edit" *ngIf="isReadonly()" (click)="onEdit()"><i class="bi bi-pencil"></i></button>
+      <button class="btn  m-1" [ngClass]="{'btn-warning': modified, 'btn-outline-dark': !modified}" type="button" title="Save" *ngIf="!isReadonly()" (click)="onSave()"><i class="bi bi-save"></i></button>
+      <button class="btn btn-outline-dark m-1" type="button" title="Cancel" *ngIf="!isReadonly()&&!isAdd()" (click)="onCancel()"><i class="bi bi-x"></i></button>
+      <button class="btn btn-outline-danger m-1" type="button" title="Delete" *ngIf="isReadonly()" (click)="onDelete()"><i class="bi bi-x"></i></button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="card border-0 p-2">
+        <div class="card-header">
+          <div class="row m-2">
+            <div class="col-md-8">
+              <label for="propertyName" class="col-form-label">Name: </label>
+              <input type="text" class="form-control" [readonly]="isReadonly()" id="propertyName" [(ngModel)]="property.name" (ngModelChange)="onChange($event)">
+            </div>
+            <div class="col-md-4">
+              <label for="propertyType" class="col-form-label">Type: </label>
+              <select class="form-select" [(ngModel)]="property.type" [disabled]="isReadonly()" id="propertyType" (ngModelChange)="onChange($event)">
+                <option *ngFor="let propertyType of propertyTypeNames" [ngValue]="propertyType">{{propertyType}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

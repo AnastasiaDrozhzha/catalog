@@ -1,0 +1,19 @@
+<table class="table table-striped">
+  <tbody>
+  <tr *ngFor="let property of results">
+    <td class="align-middle w-100">
+      <a [routerLink]="['/properties', property.id]">{{property.name}}</a>
+    </td>
+    <td>
+      {{property.type}}
+    </td>
+    <td class="text-center">
+      <button class="btn btn-outline-danger border-0 m-0 p-0" (click)="delete(property.id)" title="Delete"> <i class="bi bi-x"></i> </button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<app-pagination [currentPage]="currentPage"
+                [itemsPerPage]="itemsPerPage"
+                [totalItems]="totalItems"
+                (pageChanged)="onPageChange($event)"></app-pagination>

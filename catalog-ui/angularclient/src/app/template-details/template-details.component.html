@@ -9,8 +9,9 @@
   </div>
   <div class="row text-center">
     <div class="col">
+        <button class="btn btn-outline-dark m-1" type="button" title="Reload" *ngIf="!isAdd()" (click)="onReload()"><i class="bi bi-arrow-clockwise"></i></button>
         <button class="btn btn-outline-dark m-1" type="button" title="Edit" *ngIf="isReadonly()" (click)="onEdit()"><i class="bi bi-pencil"></i></button>
-        <button class="btn btn-outline-dark m-1" type="button" title="Save" *ngIf="!isReadonly()" (click)="onSave()"><i class="bi bi-save"></i></button>
+        <button class="btn  m-1" [ngClass]="{'btn-warning': modified, 'btn-outline-dark': !modified}" type="button" title="Save" *ngIf="!isReadonly()" (click)="onSave()"><i class="bi bi-save"></i></button>
         <button class="btn btn-outline-dark m-1" type="button" title="Cancel" *ngIf="!isReadonly()&&!isAdd()" (click)="onCancel()"><i class="bi bi-x"></i></button>
         <button class="btn btn-outline-danger m-1" type="button" title="Delete" *ngIf="isReadonly()" (click)="onDelete()"><i class="bi bi-x"></i></button>
     </div>
@@ -24,12 +25,11 @@
               <label for="templateName" class="col-form-label">Name: </label>
             </div>
             <div class="col">
-              <input type="text" class="form-control" [readonly]="isReadonly()" [formControl]="nameFC" id="templateName">
+              <input type="text" class="form-control" [readonly]="isReadonly()" [formControl]="nameFC" (change)="onChange()" id="templateName">
             </div>
             <div class="col-2 text-end">
-              <button class="btn btn-outline-dark m-1" [routerLink]="['/templates', template?.id, 'properties']"
-                      [state]="template"
-                      type="button" title="Add property" [disabled]="isReadonly()"><i class="bi bi-plus"></i></button>
+              <button class="btn btn-outline-dark m-1" (click)="addOrRemoveProperties()"
+                      type="button" title="Add or remove properties" [disabled]="isReadonly()"><i class="bi bi-plus-slash-minus"></i></button>
             </div>
           </div>
         </div>
@@ -41,14 +41,14 @@
                   <a>{{property.name}}</a>
                 </td>
                 <td class="text-center text-nowrap w-25">
-                  {{propertyTypeToString(property.type)}}
+                  {{property.type}}
                 </td>
                 <td class="text-center text-nowrap" >
                   <button *ngIf="!first" class="btn border-0 m-0 p-0" title="Up" [disabled]="isReadonly()" (click)="movePropertyUp(i)"> <i class="bi bi-arrow-up-short"></i> </button>
                   <button *ngIf="!last" class="btn border-0 m-0 p-0" title="Down" [disabled]="isReadonly()" (click)="movePropertyDown(i)"> <i class="bi bi-arrow-down-short"></i> </button>
                 </td>
                 <td class="text-center" >
-                  <button class="btn btn-outline-danger border-0 m-0 p-0" [disabled]="isReadonly()" (click)="removeProperty(property.id)" title="Remove property"> <i class="bi bi-x"></i> </button>
+                  <button class="btn btn-outline-danger border-0 m-0 p-0" [disabled]="isReadonly()" (click)="removeProperty(property.id)" title="Remove property"> <i class="bi bi-dash-square-dotted"></i> </button>
                 </td>
               </tr>
             </tbody>
