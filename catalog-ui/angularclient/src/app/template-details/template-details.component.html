@@ -1,15 +1,17 @@
 <app-alert [message]="alertMessage" (alertDismissEvent)="clearAlert()"></app-alert>
 <div class="container">
   <div class="row p-3">
-    <div class="col m-0">
+    <div class="col">
 
     </div>
-    <div class="col-md-auto">
-      <button class="btn btn-outline-danger m-1" type="button" title="Delete" *ngIf="isReadonly()" (click)="onDelete()"><i class="bi bi-x"></i></button>
+    <div class="col">
       <button class="btn btn-outline-dark m-1" type="button" title="Edit" *ngIf="isReadonly()" (click)="onEdit()"><i class="bi bi-pencil"></i></button>
       <button class="btn btn-outline-dark m-1" type="button" title="Save" *ngIf="!isReadonly()" (click)="onSave()"><i class="bi bi-save"></i></button>
       <button class="btn btn-outline-dark m-1" type="button" title="Cancel" *ngIf="!isReadonly()&&!isAdd()" (click)="onCancel()"><i class="bi bi-x"></i></button>
-      <button class="btn btn-outline-dark m-1" type="button" title="Back" (click)="onBack()"><i class="bi bi-backspace"></i></button>
+      <button class="btn btn-outline-danger m-1" type="button" title="Delete" *ngIf="isReadonly()" (click)="onDelete()"><i class="bi bi-x"></i></button>
+    </div>
+    <div class="col-md-auto">
+      <button class="btn btn-close m-1" type="button" title="Back" (click)="onBack()"></button>
     </div>
   </div>
   <div class="row justify-content-center">
