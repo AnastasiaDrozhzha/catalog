@@ -41,34 +41,34 @@ export class TemplateDetailsComponent implements Alertable {
 
 
   constructor() {
+    const state = window.history.state;
+    if (state !== null && state.template !== undefined) {
+      this.template = state.template;
+      this.setFormValues(this.template);
+      this.originalTemplate = state.originalTemplate;
+      this.modified = state.modified;
+      this.readonly = state.readonly;
+    } else {
       const templateId = this.route.snapshot.params['templateId'];
-      if (templateId === 'new') {
+      if (isNaN(Number(templateId))) {
         this.onEdit();
       } else {
-        const state = window.history.state;
-        if (state !== null && state.template !== undefined) {
-          this.template = state.template;
-          this.setFormValues(this.template);
-          this.originalTemplate = state.originalTemplate;
-          this.modified = state.modified;
-          this.readonly = state.readonly;
-        } else {
-          this.templatesService.findById(Number(templateId))
-          .subscribe(
-            {next: (template) => {
-              this.template = template;
-              this.rememberOriginalTemplate(template);
-                  // TODO: remove fakeProperties
-                  if (this.template) {
-                    this.template.properties = this.fakeProperties;
-                  }
-              this.reload(template);
-            },
-            error: (err) => {handleError(this, err);}
-          }
-          );
+        this.templatesService.findById(Number(templateId))
+        .subscribe(
+          {next: (template) => {
+            this.template = template;
+            this.rememberOriginalTemplate(template);
+                // TODO: remove fakeProperties
+                if (this.template) {
+                  this.template.properties = this.fakeProperties;
+                }
+            this.reload(template);
+          },
+          error: (err) => {handleError(this, err);}
         }
+        );
       }
+    }
   }
 
   isReadonly() : boolean {
@@ -175,7 +175,8 @@ export class TemplateDetailsComponent implements Alertable {
 
   addOrRemoveProperties(): void {
     this.saveLocally();
-    this.router.navigate(['/templates', this.template?.id, 'properties'], {state: this.collectTemplateState()});
+    const templateId = this.template?.id ?? 'new';
+    this.router.navigate(['/templates', templateId, 'properties'], {state: this.collectTemplateState()});
   }
 
   collectTemplateState() {

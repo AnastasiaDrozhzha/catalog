@@ -36,6 +36,7 @@ export class TemplatePropertiesSearchComponent {
   }
 
   onBack() {
-    this.router.navigate(['/templates', this.templateState?.template?.id], {state: this.templateState});
+    const templateId = this.templateState?.template?.id ?? 'new';
+    this.router.navigate(['/templates', templateId], {state: this.templateState});
   }
 }

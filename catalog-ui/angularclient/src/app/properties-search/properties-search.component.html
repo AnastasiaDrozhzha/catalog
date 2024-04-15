@@ -6,7 +6,7 @@
         <section>
           <form class="d-flex">
             <input class="form-control me-2" type="search" placeholder="Filter by property name" (keyup)="onSearch($event)" (search)="onSearch($event)" >
-            <button [routerLink]="['/properties/new']" class="btn btn-outline-dark" type="button" title="Add Property"><i class="bi bi-plus"></i></button>
+            <button [routerLink]="['/properties', 'new']" class="btn btn-outline-dark" type="button" title="Add Property"><i class="bi bi-plus"></i></button>
           </form>
         </section>
       </div>

@@ -1,10 +1,10 @@
 <table class="table table-striped">
   <tbody>
   <tr *ngFor="let property of results">
-    <td class="align-middle w-100">
+    <td class="align-middle w-75">
       <a [routerLink]="['/properties', property.id]">{{property.name}}</a>
     </td>
-    <td>
+    <td class="w-25">
       {{property.type}}
     </td>
     <td class="text-center">

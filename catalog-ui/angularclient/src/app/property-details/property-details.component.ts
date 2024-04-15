@@ -32,7 +32,7 @@ export class PropertyDetailsComponent implements Alertable {
     this.property = { name: '', type: PropertyType[PropertyType.string]}
     this.originalProperty = this.rememberOriginalProperty(this.property);
     const propertyId = this.route.snapshot.params['propertyId'];
-    if (propertyId === 'new') {
+    if (isNaN(Number(propertyId))) {
       this.onEdit();
     } else {
         this.propertiesService.findById(Number(propertyId))
