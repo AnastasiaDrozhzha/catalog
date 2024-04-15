@@ -1,1 +1,20 @@
-<p>template-properties-search-results works!</p>
+<table class="table table-striped">
+  <tbody>
+  <tr *ngFor="let property of results">
+    <td class="align-middle w-75">
+      <a>{{property.name}}</a>
+    </td>
+    <td class="align-middle w-25">
+      {{property.type}}
+    </td>
+    <td class="text-center">
+      <button class="btn border-0 m-0 p-0" *ngIf="!isPresentInTemplate(property.id)" title="Add" (click)="onAdd(property)" style="font-size: 1.5rem"> <i class="bi bi-plus-circle-dotted"></i> </button>
+      <button class="btn border-0 m-0 p-0" *ngIf="isPresentInTemplate(property.id)" title="Remove" (click)="onRemove(property)" style="font-size: 1.5rem"><i class="bi bi-dash-circle-dotted"></i> </button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<app-pagination [currentPage]="currentPage"
+                [itemsPerPage]="itemsPerPage"
+                [totalItems]="totalItems"
+                (pageChanged)="onPageChange($event)"></app-pagination>

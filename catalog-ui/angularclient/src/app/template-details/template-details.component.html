@@ -48,7 +48,7 @@
                   <button *ngIf="!last" class="btn border-0 m-0 p-0" title="Down" [disabled]="isReadonly()" (click)="movePropertyDown(i)"> <i class="bi bi-arrow-down-short"></i> </button>
                 </td>
                 <td class="text-center" >
-                  <button class="btn btn-outline-danger border-0 m-0 p-0" [disabled]="isReadonly()" (click)="removeProperty(property.id)" title="Remove property"> <i class="bi bi-dash"></i> </button>
+                  <button class="btn border-0 m-0 p-0" [disabled]="isReadonly()" (click)="removeProperty(property.id)" title="Remove property" style="font-size: 1.5rem"> <i class="bi bi-dash-circle-dotted"></i>  </button>
                 </td>
               </tr>
             </tbody>

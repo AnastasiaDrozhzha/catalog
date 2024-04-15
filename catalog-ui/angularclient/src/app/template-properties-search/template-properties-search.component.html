@@ -15,8 +15,9 @@
         </div>
         <section>
           <form class="d-flex">
-            <input id="searchProperties" class="form-control me-2" type="search" placeholder="Filter by property name" >
-            <button class="btn btn-outline-dark" type="button" title="Return"><i class="bi bi-list"></i></button>
+            <input id="searchProperties" class="form-control me-2" type="search" placeholder="Filter by property name"
+                   (keyup)="onSearch($event)" (search)="onSearch($event)"  >
+            <button class="btn btn-outline-dark" type="button" title="Return" (click)="onBack()"><i class="bi bi-list"></i></button>
           </form>
         </section>
       </div>
@@ -24,13 +25,14 @@
     <div class="card border border-0">
       <div class="card-body">
         <section>
-          <app-template-properties-search-results></app-template-properties-search-results>
-          <!--          <app-templates-search-results [results]="results"-->
-          <!--                                        [currentPage]="currentPage"-->
-          <!--                                        [itemsPerPage]="itemsPerPage"-->
-          <!--                                        [totalItems]="totalItems"-->
-          <!--                                        (deleteEvent)="onDelete($event)"-->
-          <!--                                        (pageChangeEvent)="onPageChange($event)"></app-templates-search-results>-->
+          <app-template-properties-search-results [results]="results"
+                                                  [currentPage]="currentPage"
+                                                  [itemsPerPage]="itemsPerPage"
+                                                  [totalItems]="totalItems"
+                                                  [template]="templateState?.template"
+                                                  (removeEvent)="onRemove($event)"
+                                                  (addEvent)="onAdd($event)"
+                                                  (pageChangeEvent)="onPageChange($event)"></app-template-properties-search-results>
         </section>
       </div>
     </div>

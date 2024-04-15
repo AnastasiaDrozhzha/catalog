@@ -31,15 +31,6 @@ export class TemplateDetailsComponent implements Alertable {
   alertMessage: string = '';
   modified = false;
 
-
-  fakeProperties: Property[] = [{id: 1, name: 'Prop1', type: PropertyType[PropertyType.string]},
-                                   {id: 2, name: 'Prop2', type: PropertyType[PropertyType.number]},
-                                   {id: 3, name: 'Prop3', type: PropertyType[PropertyType.boolean]},
-                                   {id: 4, name: 'Prop4', type: PropertyType[PropertyType.string]},
-                                     {id: 5, name: 'Prop5', type: PropertyType[PropertyType.number]},
-                                     {id: 6, name: 'Prop6', type: PropertyType[PropertyType.boolean]}];
-
-
   constructor() {
     const state = window.history.state;
     if (state !== null && state.template !== undefined) {
@@ -58,10 +49,6 @@ export class TemplateDetailsComponent implements Alertable {
           {next: (template) => {
             this.template = template;
             this.rememberOriginalTemplate(template);
-                // TODO: remove fakeProperties
-                if (this.template) {
-                  this.template.properties = this.fakeProperties;
-                }
             this.reload(template);
           },
           error: (err) => {handleError(this, err);}
@@ -141,10 +128,6 @@ export class TemplateDetailsComponent implements Alertable {
       {next: (template) => {
         this.template = template;
         this.rememberOriginalTemplate(template);
-            // TODO: remove fakeProperties
-            if (this.template) {
-              this.template.properties = this.fakeProperties;
-            }
         this.reload(template);
       },
       error: (err) => {handleError(this, err);}
@@ -161,8 +144,17 @@ export class TemplateDetailsComponent implements Alertable {
 
   private rememberOriginalTemplate(template: Template) {
      this.originalTemplate = {id: template.id, name: template.name};
-     // TODO: deep copy of properties
-     this.originalTemplate.properties = this.fakeProperties;
+     if (template.properties !== undefined) {
+       this.originalTemplate.properties = [];
+       for (let i = 0; i < template.properties.length; i++) {
+         let originalProperty = {
+           id: template.properties[i].id,
+           name: template.properties[i].name,
+           type: template.properties[i].type
+         }
+         this.originalTemplate.properties.push(originalProperty);
+       }
+     }
   }
 
   showAlert(message: string): void {
@@ -188,15 +180,23 @@ export class TemplateDetailsComponent implements Alertable {
   }
 
   removeProperty(propertyId: number|undefined): void {
-    console.log("property remove with id " + propertyId);
+    if (propertyId !== undefined && this.template?.properties !== undefined) {
+      const index = this.template.properties.findIndex(templateProp => propertyId === templateProp.id);
+      if (index >= 0) {
+        this.template.properties.splice(index, 1);
+        this.modified = true;
+      }
+    }
   }
 
   movePropertyUp(index: number): void {
     this.moveProperty(index, index-1);
+    this.modified = true;
   }
 
   movePropertyDown(index: number): void {
     this.moveProperty(index, index+1);
+    this.modified = true;
   }
 
   private moveProperty(from: number, to: number): void {

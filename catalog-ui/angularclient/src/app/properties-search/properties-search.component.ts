@@ -5,8 +5,6 @@ import { debounceTime } from 'rxjs/operators';
 
 import { Subject } from 'rxjs';
 
-import { Template } from '../model/template';
-import { TemplateState } from '../model/template-state';
 import { Property } from '../model/property';
 import { PropertyType } from '../model/property-type';
 import { handleError } from '../model/errorUtil';
