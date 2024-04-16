@@ -22,24 +22,25 @@ CREATE TABLE public.property
 ALTER TABLE IF EXISTS public.property
     OWNER to postgres;
 
-CREATE TABLE public.template_property
+CREATE TABLE IF NOT EXISTS public.template_property
 (
-    template_id integer,
-    property_id integer,
+    template_id integer NOT NULL,
+    property_id integer NOT NULL,
     index integer NOT NULL,
-    PRIMARY KEY (template_id, property_id),
+    CONSTRAINT template_property_pkey PRIMARY KEY (template_id, property_id),
     CONSTRAINT uc_template_property_index UNIQUE (template_id, property_id, index),
-    CONSTRAINT fk_template_id FOREIGN KEY (template_id)
-        REFERENCES public.template (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID,
     CONSTRAINT fk_property_id FOREIGN KEY (property_id)
         REFERENCES public.property (id) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_template_id FOREIGN KEY (template_id)
+        REFERENCES public.template (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
         NOT VALID
-);
+)
+
+TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.template_property
     OWNER to postgres;
