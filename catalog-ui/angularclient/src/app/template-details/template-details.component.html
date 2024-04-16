@@ -36,15 +36,20 @@
           <table *ngIf="template" class="table table-striped mb-0">
             <tbody>
               <tr *ngFor="let property of template.properties; let first = first; let last = last; index as i">
+                <td class="text-center" style="min-width: 5em;">
+                  <span *ngIf="!isIndexToReorder(i)">{{i+1}}</span>
+                  <select *ngIf="isIndexToReorder(i)" class="form-select" style="width: auto" (change)="doReorder($event)">
+                    <option *ngFor="let property of template.properties; index as j" value="{{j}}" [selected]="isIndexToReorder(j)">{{j+1}}</option>
+                  </select>
+                  </td>
+                <td class="text-center text-nowrap" >
+                  <button class="btn border-0 m-0 p-0" (click)="toggleReordering(i)"><i class="bi bi-arrow-down-up"></i></button>
+                </td>
                 <td class="align-middle w-75 text-break">
                   <a>{{property.name}}</a>
                 </td>
                 <td class="text-center text-nowrap w-25">
                   {{property.type}}
-                </td>
-                <td class="text-center text-nowrap" >
-                  <button *ngIf="!first" class="btn border-0 m-0 p-0" title="Up" (click)="movePropertyUp(i)"> <i class="bi bi-arrow-up-short"></i> </button>
-                  <button *ngIf="!last" class="btn border-0 m-0 p-0" title="Down" (click)="movePropertyDown(i)"> <i class="bi bi-arrow-down-short"></i> </button>
                 </td>
                 <td class="text-center" >
                   <button class="btn border-0 m-0 p-0" (click)="removeProperty(property.id)" title="Remove property" style="font-size: 1.5rem"> <i class="bi bi-dash-circle-dotted"></i>  </button>

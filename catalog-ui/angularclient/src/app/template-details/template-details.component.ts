@@ -29,6 +29,7 @@ export class TemplateDetailsComponent implements Alertable {
   nameFC = new FormControl('')
   alertMessage: string = '';
   modified = false;
+  indexToReorder: number|undefined;
 
   constructor() {
     const state = window.history.state;
@@ -174,14 +175,25 @@ export class TemplateDetailsComponent implements Alertable {
     }
   }
 
-  movePropertyUp(index: number): void {
-    this.moveProperty(index, index-1);
-    this.modified = true;
+  toggleReordering(index: number): void {
+    if (this.indexToReorder === undefined) {
+      this.indexToReorder = index;
+    } else {
+      this.indexToReorder = undefined;
+    }
   }
 
-  movePropertyDown(index: number): void {
-    this.moveProperty(index, index+1);
-    this.modified = true;
+  isIndexToReorder(index: number): boolean {
+    return this.indexToReorder === index;
+  }
+
+  doReorder(event: Event): void {
+    const targetIndex = (<HTMLSelectElement>event.target).value;
+    if (this.indexToReorder !== undefined && !isNaN(Number(targetIndex))) {
+      this.moveProperty(this.indexToReorder, Number(targetIndex));
+      this.modified = true;
+    }
+    this.indexToReorder = undefined;
   }
 
   private moveProperty(from: number, to: number): void {
