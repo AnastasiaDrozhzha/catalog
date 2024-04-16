@@ -25,16 +25,13 @@ export class PropertyDetailsComponent implements Alertable {
   property: Property;
   originalProperty: Property;
   modified = false;
-  readonly = true;
   alertMessage = '';
 
   constructor() {
     this.property = { name: '', type: PropertyType[PropertyType.string]}
     this.originalProperty = this.rememberOriginalProperty(this.property);
     const propertyId = this.route.snapshot.params['propertyId'];
-    if (isNaN(Number(propertyId))) {
-      this.onEdit();
-    } else {
+    if (!isNaN(Number(propertyId))) {
         this.propertiesService.findById(Number(propertyId))
         .subscribe(
           { next: (property) => {
@@ -45,10 +42,6 @@ export class PropertyDetailsComponent implements Alertable {
           }
         );
     }
-  }
-
-  isReadonly(): boolean {
-    return this.readonly;
   }
 
   isAdd(): boolean {
@@ -66,30 +59,26 @@ export class PropertyDetailsComponent implements Alertable {
     });
   }
 
-  onEdit(): void {
-    this.readonly = false;
-  }
-
   onSave(): void {
     if (this.isAdd()) {
       this.propertiesService.create(this.property).subscribe({next: (property) => {
         this.property = property;
         this.rememberOriginalProperty(property);
-        this.readonly = true;
+        this.modified = false;
         },
       error: (err) => {handleError(this, err);} });
     } else {
       this.propertiesService.update(this.property).subscribe({next: (property) => {
          this.property = property;
          this.rememberOriginalProperty(property);
-         this.readonly = true;
+         this.modified = false;
         },
         error: (err) => {handleError(this, err);} });
     }
   }
 
   onCancel(): void {
-    this.readonly = true;
+    this.modified = false;
     this.property = this.originalProperty;
     this.rememberOriginalProperty(this.originalProperty);
   }

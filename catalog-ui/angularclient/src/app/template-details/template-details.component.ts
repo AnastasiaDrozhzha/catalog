@@ -26,7 +26,6 @@ export class TemplateDetailsComponent implements Alertable {
   templatesService = inject(TemplatesService);
   template: Template | undefined;
   originalTemplate: Template | undefined;
-  readonly = true;
   nameFC = new FormControl('')
   alertMessage: string = '';
   modified = false;
@@ -38,12 +37,9 @@ export class TemplateDetailsComponent implements Alertable {
       this.setFormValues(this.template);
       this.originalTemplate = state.originalTemplate;
       this.modified = state.modified;
-      this.readonly = state.readonly;
     } else {
       const templateId = this.route.snapshot.params['templateId'];
-      if (isNaN(Number(templateId))) {
-        this.onEdit();
-      } else {
+      if (!isNaN(Number(templateId))) {
         this.templatesService.findById(Number(templateId))
         .subscribe(
           {next: (template) => {
@@ -58,16 +54,8 @@ export class TemplateDetailsComponent implements Alertable {
     }
   }
 
-  isReadonly() : boolean {
-    return this.readonly;
-  }
-
-  onEdit() {
-    this.readonly = false;
-  }
-
   onCancel() {
-    this.readonly = true;
+    this.modified = false;
     this.reload(this.originalTemplate);
   }
 
@@ -78,7 +66,6 @@ export class TemplateDetailsComponent implements Alertable {
       this.templatesService.create(this.template).subscribe({next: (template) => {
         this.template = template;
         this.rememberOriginalTemplate(template);
-        this.readonly = true;
         this.reload(template);
         },
       error: (err) => {handleError(this, err);} });
@@ -86,7 +73,6 @@ export class TemplateDetailsComponent implements Alertable {
       this.templatesService.update(this.template).subscribe({next: (template) => {
         this.template = template;
         this.rememberOriginalTemplate(template);
-        this.readonly = true;
         this.reload(template);
         },
         error: (err) => {handleError(this, err);} });
@@ -174,8 +160,7 @@ export class TemplateDetailsComponent implements Alertable {
   collectTemplateState() {
     return {template: this.template,
       originalTemplate: this.originalTemplate,
-      modified: this.modified,
-      readonly: this.readonly
+      modified: this.modified
       };
   }
 
