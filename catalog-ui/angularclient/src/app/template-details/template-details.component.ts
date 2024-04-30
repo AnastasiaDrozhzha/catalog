@@ -57,7 +57,13 @@ export class TemplateDetailsComponent implements Alertable {
 
   onCancel() {
     this.modified = false;
-    this.reload(this.originalTemplate);
+    if (this.originalTemplate !== undefined) {
+      const clone = this.cloneTemplate(this.originalTemplate);
+      this.template = clone;
+    } else {
+      this.template = undefined;
+    }
+    this.reload(this.template);
   }
 
   onSave() {
@@ -129,19 +135,25 @@ export class TemplateDetailsComponent implements Alertable {
     return this.template;
   }
 
-  private rememberOriginalTemplate(template: Template) {
-     this.originalTemplate = {id: template.id, name: template.name};
-     if (template.properties !== undefined) {
-       this.originalTemplate.properties = [];
-       for (let i = 0; i < template.properties.length; i++) {
-         let originalProperty = {
-           id: template.properties[i].id,
-           name: template.properties[i].name,
-           type: template.properties[i].type
+  private cloneTemplate(template: Template) : Template {
+    const clone: Template = {id: template.id, name: template.name};
+       if (template.properties !== undefined) {
+         clone.properties = [];
+         for (let i = 0; i < template.properties.length; i++) {
+           let originalProperty = {
+             id: template.properties[i].id,
+             name: template.properties[i].name,
+             type: template.properties[i].type
+           }
+           clone.properties.push(originalProperty);
          }
-         this.originalTemplate.properties.push(originalProperty);
        }
-     }
+       return clone;
+    }
+
+
+  private rememberOriginalTemplate(template: Template): void {
+     this.originalTemplate = this.cloneTemplate(template);
   }
 
   showAlert(message: string): void {
