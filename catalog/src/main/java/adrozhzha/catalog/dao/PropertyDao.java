@@ -26,7 +26,7 @@ public class PropertyDao {
 
     public List<Property> search(String search, Integer offset, Integer pageSize) {
         Result<PropertyRecord> results = create.selectFrom(PROPERTY)
-                .where(PROPERTY.NAME.like(search + "%")) // TODO: fulltext search
+                .where(Utils.search(PROPERTY.NAME, search))
                 .orderBy(PROPERTY.NAME)
                 .offset(offset)
                 .limit(pageSize)
@@ -46,7 +46,7 @@ public class PropertyDao {
     public int totalCount(String search) {
         return create.fetchCount(
                 selectFrom(PROPERTY)
-                        .where(PROPERTY.NAME.like(search + "%"))); // TODO: fulltext search
+                        .where(Utils.search(PROPERTY.NAME, search)));
 
     }
 

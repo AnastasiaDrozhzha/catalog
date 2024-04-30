@@ -29,7 +29,7 @@ public class TemplateDao {
 
     public List<Template> search(String search, Integer offset, Integer pageSize) {
         Result<TemplateRecord> results = create.selectFrom(TEMPLATE)
-                .where(TEMPLATE.NAME.like(search + "%")) // TODO: fulltext search
+                .where(Utils.search(TEMPLATE.NAME, search))
                 .orderBy(TEMPLATE.NAME)
                 .offset(offset)
                 .limit(pageSize)
@@ -48,7 +48,7 @@ public class TemplateDao {
     public int totalCount(String search) {
         return create.fetchCount(
                 selectFrom(TEMPLATE)
-                .where(TEMPLATE.NAME.like(search + "%"))); // TODO: fulltext search
+                .where(Utils.search(TEMPLATE.NAME, search)));
 
     }
 
